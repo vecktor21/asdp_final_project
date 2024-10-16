@@ -8,7 +8,7 @@ namespace ASDP.FinalProject.Dtos.Sigex
         public string description { get; set; }
         public string signType { get; set; } = "cms";
         public string signature { get; set; } = null!;
-        public List<SigexEmailNotifications> emailNotifications { get; set; } = new();
+        public SigexEmailNotifications emailNotifications { get; set; } = new();
         public SigexDocumentSettingsDto settings { get; set; } = new();
 
 

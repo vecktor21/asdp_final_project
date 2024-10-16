@@ -1,0 +1,1 @@
+docker run -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -d -p 127.0.0.1:5432:5432 -v ads_db:/var/lib/postgresql/data --name ads_final_project_db postgres

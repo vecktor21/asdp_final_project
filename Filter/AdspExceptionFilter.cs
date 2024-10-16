@@ -16,6 +16,7 @@ namespace ASDP.FinalProject.Filter
                     Log.Logger.Warning(e.Message);
                     break;
                 default:
+                    Log.Logger.Error(context.Exception.Message);
                     break;
             }
             return base.OnExceptionAsync(context);

@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using ASDP.FinalProject.UseCases.Documents.Queries;
+using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASDP.FinalProject.Controllers
@@ -18,10 +18,11 @@ namespace ASDP.FinalProject.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> LoadDocument(IFormFile file )
+        [HttpGet("loadTemplates")]
+        public async Task<IActionResult> GetTemplates()
         {
-            throw new NotImplementedException();
+            var res = await _mediator.Send(new GetTemplatesQuery());
+            return Ok(res);
         }
     }
 }

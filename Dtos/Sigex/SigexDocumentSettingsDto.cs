@@ -18,7 +18,7 @@
     {
         public string iin { get; set; }
         public string bin { get; set; }
-        public string cas { get; set; } /*= "nca";*/
+        public string ca { get; set; } /*= "nca";*/
 
     }
 

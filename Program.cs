@@ -6,7 +6,10 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSerilog();
+builder.Services.AddSerilog(x=>
+    x.WriteTo.Console()
+    );
+
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<AdspExceptionFilter>();
