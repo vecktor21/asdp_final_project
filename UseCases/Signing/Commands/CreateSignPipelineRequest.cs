@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ASDP.FinalProject.UseCases.Signing.Commands
 {
-    public class CreateSignPipelineRequest : IRequest
+    public class CreateSignPipelineRequest : IRequest<Result>
     {
         public Guid TemplateId { get; set; }
         public int UserId { get; set; }

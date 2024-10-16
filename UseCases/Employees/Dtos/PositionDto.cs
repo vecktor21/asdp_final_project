@@ -1,13 +1,13 @@
 ﻿using ASDP.FinalProject.Constants;
+using ASDP.FinalProject.DAL.Models;
 
-namespace ASDP.FinalProject.DAL.Models
+namespace ASDP.FinalProject.UseCases.Employees.Dtos
 {
-    public class Position
+    public class PositionDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public PositionCode Code { get; set; }
-        public List<PositionPermission> Permissions { get; set; } = new List<PositionPermission>();
-
+        public List<PermissionDto> Permissions { get; set; }
     }
 }

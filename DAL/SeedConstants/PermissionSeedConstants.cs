@@ -1,7 +1,7 @@
 ﻿using ASDP.FinalProject.Constants;
 using ASDP.FinalProject.DAL.Models;
 
-namespace ASDP.FinalProject.SeedConstants
+namespace ASDP.FinalProject.DAL.SeedConstants
 {
     public static class PermissionSeedConstants
     {

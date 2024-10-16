@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using ASDP.FinalProject;
 using ASDP.FinalProject.Filter;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,10 @@ builder.Services.AddControllers(x =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x =>
+{
+    x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ASDP.FinalProject.xml"));
+});
 
 builder.Services.Inject(builder.Configuration);
 

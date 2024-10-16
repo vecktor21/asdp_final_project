@@ -3,6 +3,7 @@ using System;
 using ASDP.FinalProject.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ASDP.FinalProject.Migrations
 {
     [DbContext(typeof(AdspContext))]
-    partial class AdspContextModelSnapshot : ModelSnapshot
+    [Migration("20241016191844_Add_Seed_Data")]
+    partial class Add_Seed_Data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,43 +142,6 @@ namespace ASDP.FinalProject.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ASDP.FinalProject.DAL.Models.PositionPermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("PositionId");
-
-                    b.ToTable("PositionPermission", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PermissionId = 1,
-                            PositionId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PermissionId = 1,
-                            PositionId = 3
-                        });
-                });
-
             modelBuilder.Entity("ASDP.FinalProject.DAL.Models.SignDocument", b =>
                 {
                     b.Property<Guid>("Id")
@@ -280,6 +246,45 @@ namespace ASDP.FinalProject.Migrations
                     b.ToTable("Templates");
                 });
 
+            modelBuilder.Entity("PermissionPosition", b =>
+                {
+                    b.Property<int>("PermissionsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PermissionsId", "PositionId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("PermissionPosition");
+                });
+
+            modelBuilder.Entity("PositionPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("Id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PositionPermission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        },
+                        new
+                        {
+                            Id = 2
+                        });
+                });
+
             modelBuilder.Entity("ASDP.FinalProject.DAL.Models.Employee", b =>
                 {
                     b.HasOne("ASDP.FinalProject.DAL.Models.Position", "Position")
@@ -287,25 +292,6 @@ namespace ASDP.FinalProject.Migrations
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Position");
-                });
-
-            modelBuilder.Entity("ASDP.FinalProject.DAL.Models.PositionPermission", b =>
-                {
-                    b.HasOne("ASDP.FinalProject.DAL.Models.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ASDP.FinalProject.DAL.Models.Position", "Position")
-                        .WithMany("Permissions")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
 
                     b.Navigation("Position");
                 });
@@ -351,16 +337,26 @@ namespace ASDP.FinalProject.Migrations
                     b.Navigation("SignerEmployee");
                 });
 
+            modelBuilder.Entity("PermissionPosition", b =>
+                {
+                    b.HasOne("ASDP.FinalProject.DAL.Models.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASDP.FinalProject.DAL.Models.Position", null)
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ASDP.FinalProject.DAL.Models.Employee", b =>
                 {
                     b.Navigation("CreatedSignPipelines");
 
                     b.Navigation("PipelinesToSign");
-                });
-
-            modelBuilder.Entity("ASDP.FinalProject.DAL.Models.Position", b =>
-                {
-                    b.Navigation("Permissions");
                 });
 
             modelBuilder.Entity("ASDP.FinalProject.DAL.Models.SignPipeline", b =>

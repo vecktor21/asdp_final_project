@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Refit;
 using Scrutor;
 using System.Reflection;
+using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
+using ASDP.FinalProject.UseCases.Employees.Commands;
 
 namespace ASDP.FinalProject
 {
@@ -24,22 +27,25 @@ namespace ASDP.FinalProject
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-
-            services.Scan(x => x.FromExecutingAssembly()
+            services.Scan(x => x.FromAssemblies(Assembly.GetExecutingAssembly())
                 .AddClasses(x => x.AssignableTo(typeof(IRequestValidator<>)))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+
             services.Scan(x => x.FromExecutingAssembly()
                 .AddClasses(x => x.AssignableTo(typeof(IRequestHandler<>)))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+
             services.Scan(x => x.FromExecutingAssembly()
                 .AddClasses(x => x.AssignableTo(typeof(IRequestHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
 
-            //services.Scan(x => x.FromExecutingAssembly().AddClasses().AsImplementedInterfaces());
+            
+
             services.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

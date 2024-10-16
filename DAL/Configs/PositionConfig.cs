@@ -1,6 +1,7 @@
 ﻿using ASDP.FinalProject.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace ASDP.FinalProject.DAL.Configs
 {
@@ -8,7 +9,10 @@ namespace ASDP.FinalProject.DAL.Configs
     {
         public void Configure(EntityTypeBuilder<Position> builder)
         {
-            builder.HasMany(x => x.Permissions).WithMany();
+            builder.HasMany(x => x.Permissions)
+                .WithOne(x => x.Position)
+                .HasForeignKey(x => x.PositionId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -7,12 +7,13 @@ using ASDP.FinalProject.Services;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace ASDP.FinalProject.UseCases.Signing.Commands
 {
-    public class CreateSignPipelineRequestHandler : IRequestHandler<CreateSignPipelineRequest>
+    public class CreateSignPipelineRequestHandler : IRequestHandler<CreateSignPipelineRequest, Result>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,7 +28,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
             _sigexApi = sigexApi;
             _context = unitOfWork.GetContext();
         }
-        public async Task Handle(CreateSignPipelineRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateSignPipelineRequest request, CancellationToken cancellationToken)
         {
             _unitOfWork.BeginTransaction();
             try
@@ -53,7 +54,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 var signers = await _context.Employees
                     .Include(x => x.Position)
                     .ThenInclude(x => x.Permissions)
-                    .Where(x => x.Position.Permissions.Any(a => a.Code == PermissionCodes.SignDocuments))
+                    .Where(x => x.Position.Permissions.Any(a => a.Permission.Code == PermissionCodes.SignDocuments))
                     .ToListAsync();
 
                 var teamlid = signers.Where(x=> x.Position.Code == PositionCode.Teamlid).First();
@@ -123,6 +124,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 throw;
             }
             _unitOfWork.CommitTransaction();
+            return Result.Success();
 
         }
     }

@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASDP.FinalProject.UseCases.Signing.Commands
 {
-    public class CreateSignPipelineRequestValidator : IRequestValidator<CreateSignPipelineRequest>
+    public class CreateSignPipelineRequestValidator : RequestValidatorBase<CreateSignPipelineRequest>
     {
         private AdspContext _context {  get; set; }
         public CreateSignPipelineRequestValidator(IUnitOfWork unitOfWork)
         {
             _context = unitOfWork.GetContext();
         }
-        public async Task<Result> RequestValidateAsync(CreateSignPipelineRequest request, CancellationToken cancellationToken)
+        public override async Task<Result> RequestValidateAsync(CreateSignPipelineRequest request, CancellationToken cancellationToken)
         {
             var employee = await _context.Employees.FirstOrDefaultAsync(x=> x.Id == request.UserId);
             if (employee == null)
