@@ -3,7 +3,7 @@ using Refit;
 
 namespace ASDP.FinalProject.Services
 {
-    public interface SigexApi
+    /*public interface SigexApi
     {
         [Post("/api")]
         public Task<ApiResponse<SigexRegisterNewDocumentResponse>> RegisterNewDocument([Body]SigexRegisterNewDocumentRequest data);
@@ -33,5 +33,5 @@ namespace ASDP.FinalProject.Services
         [Post("/api/auth")]
         [Headers("Content-Type: application/json")]
         public Task<ApiResponse<SigexAuthDataResponse>> AuthStep2(SigexAuthStep2Request data);
-    }
+    }*/
 }
