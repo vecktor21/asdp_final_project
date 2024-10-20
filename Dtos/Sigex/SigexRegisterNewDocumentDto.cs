@@ -13,10 +13,10 @@ namespace ASDP.FinalProject.Dtos.Sigex
 
 
     }
-    public class SigexRegisterNewDocumentResponse
+    public class SigexRegisterNewDocumentResponse : SigexResponse
     {
-        public string documentId { get; set; }
-        public int signId { get; set; }
-        public string data { get; set; }
+        public string DocumentId { get; set; }
+        public int SignId { get; set; }
+        public string Data { get; set; }
     }
 }

@@ -3,13 +3,19 @@ using ASDP.FinalProject.DAL;
 using ASDP.FinalProject.DAL.Models;
 using ASDP.FinalProject.DAL.Repositories;
 using ASDP.FinalProject.Dtos.Sigex;
+using ASDP.FinalProject.Exceptions;
+using ASDP.FinalProject.Helpers;
 using ASDP.FinalProject.Services;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Refit;
+using System.Net;
 using System.Text;
+using System.Xml;
+using static CSharpFunctionalExtensions.Result;
 
 namespace ASDP.FinalProject.UseCases.Signing.Commands
 {
@@ -17,20 +23,22 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private readonly SigexApi _sigexApi;
         private readonly AdspContext _context;
 
-        public CreateSignPipelineRequestHandler(IUnitOfWork unitOfWork, IMapper mapper,
-            SigexApi sigexApi)
+        public CreateSignPipelineRequestHandler(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, SigexApi sigexApi)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
             _sigexApi = sigexApi;
             _context = unitOfWork.GetContext();
         }
         public async Task<Result> Handle(CreateSignPipelineRequest request, CancellationToken cancellationToken)
         {
-            _unitOfWork.BeginTransaction();
+            _unitOfWork.BeginTransaction(); 
+
             try
             {
 
@@ -57,8 +65,8 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                     .Where(x => x.Position.Permissions.Any(a => a.Permission.Code == PermissionCodes.SignDocuments))
                     .ToListAsync();
 
-                var teamlid = signers.Where(x=> x.Position.Code == PositionCode.Teamlid).First();
-                var director = signers.Where(x => x.Position.Code == PositionCode.Director).First();
+                var teamlid = await _context.Employees.FirstOrDefaultAsync(x => x.Position.Code == Constants.PositionCode.Teamlid && x.Iin == request.TeamleadIin);
+                var director = await _context.Employees.FirstOrDefaultAsync(x => x.Position.Code == Constants.PositionCode.Director && x.Iin == request.DirectorIin);
 
                 var signerEmployees = new List<SignerToPipeline>()
                 {
@@ -83,20 +91,22 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
 
                 var template = _context.Templates.Where(x => x.Id == request.TemplateId).Single();
 
-                var registerResult = await _sigexApi.RegisterNewDocument(new SigexRegisterNewDocumentRequest
+                var data = new SigexRegisterNewDocumentRequest
                 {
+                    title = template.Name,
+                    signType = "cms",
+                    signature = request.CmsSign,
                     emailNotifications = new SigexEmailNotifications
                     {
                         to = new List<string>() { teamlid.Mail, director.Mail },
                         doNotAttachDocument = false,
                     },
-                    signature = request.CmsSign,
-                    signType = "cms",
-                    title = template.Name,
                     settings = new SigexDocumentSettingsDto
                     {
+                        @private = false,
+                        signaturesLimit = 2,
                         forceArchive = true,
-                        sequentialSignersRequirements=true,
+                        sequentialSignersRequirements = true,
                         signersRequirements = new List<SigexSignersRequirementsDto>
                         {
                             new SigexSignersRequirementsDto
@@ -111,9 +121,22 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                             }
                         }
                     }
-                });
+                };
 
-                var saveResult = await _sigexApi.SaveDocument(registerResult.documentId, new ByteArrayContent(signDocument.Content));
+                var registerResult = await _sigexApi.RegisterNewDocument(data);
+
+                
+                if (registerResult.Content.DocumentId == null)
+                {
+                    throw new SigexException(registerResult.Content);
+                }
+
+                var saveResult = await _sigexApi.SaveDocument(registerResult.Content.DocumentId, new ByteArrayContent(signDocument.Content));
+
+                if (saveResult.DocumentId == null)
+                {
+                    throw new SigexException(saveResult);
+                }
 
                 _context.SignPipeline.Add(signPipeline);
                 _context.SaveChanges();

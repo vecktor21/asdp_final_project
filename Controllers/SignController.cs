@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ASDP.FinalProject.Controllers
 {
@@ -21,9 +22,11 @@ namespace ASDP.FinalProject.Controllers
 
         [HttpPost("registerDocument")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateSignPipeline([FromForm] CreateSignPipelineContract data)
+        public async Task<IActionResult> CreateSignPipeline([FromForm] CreateSignPipelineContract data,
+            [FromHeader] string Authorization)
         {
             var req = _mapper.Map<CreateSignPipelineRequest>(data);
+            req.Token = Authorization;
             await _mediator.Send(req);
             return Ok();
         }

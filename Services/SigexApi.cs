@@ -6,7 +6,7 @@ namespace ASDP.FinalProject.Services
     public interface SigexApi
     {
         [Post("/api")]
-        public Task<SigexRegisterNewDocumentResponse> RegisterNewDocument([Body]SigexRegisterNewDocumentRequest data);
+        public Task<ApiResponse<SigexRegisterNewDocumentResponse>> RegisterNewDocument([Body]SigexRegisterNewDocumentRequest data);
 
         [Post("/api/{id}/data")]
         [Headers("Content-Type: application/octet-stream")]
@@ -24,5 +24,14 @@ namespace ASDP.FinalProject.Services
             bool? withoutDocumentVisualization = false,
             bool? withoutSignaturesVisualization = false,
             bool? withoutQRCodesInSignaturesVisualization = false);
+
+
+        [Post("/api/auth")]
+        [Headers("Content-Type: application/json")]
+        public Task<ApiResponse<SigexAuthNonceResponse>> AuthStep1([Body] SigexAuthNonceRequest data);
+
+        [Post("/api/auth")]
+        [Headers("Content-Type: application/json")]
+        public Task<ApiResponse<SigexAuthDataResponse>> AuthStep2(SigexAuthStep2Request data);
     }
 }

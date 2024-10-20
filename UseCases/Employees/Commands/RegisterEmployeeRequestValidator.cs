@@ -22,7 +22,7 @@ namespace ASDP.FinalProject.UseCases.Employees.Commands
             RuleFor(x => x.IdentityNumber).NotNull();
             RuleFor(x => x.IdentityIssueDate).NotNull();
             RuleFor(x => x.IdentityIssuer).NotNull();
-            RuleFor(x => x.Iin).NotNull();
+            RuleFor(x => x.Iin).NotNull().Length(12);
             RuleFor(x => x.PositionCode).NotNull();
         }
 

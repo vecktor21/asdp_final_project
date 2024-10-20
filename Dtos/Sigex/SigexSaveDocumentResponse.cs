@@ -1,23 +1,23 @@
 ﻿namespace ASDP.FinalProject.Dtos.Sigex
 {
-    public class SigexSaveDocumentResponse
+    public class SigexSaveDocumentResponse: SigexResponse
     {
-        public string documentId { get; set; }
-        public int signedDataSize { get; set; }
-        public List<DigestDto> digests { get; set; }
-        public List<EmailNotificationsResponseDto> emailNotifications { get; set; }
-        public bool dataArchived {  get; set; }
+        public string DocumentId { get; set; }
+        public int SignedDataSize { get; set; }
+        public List<DigestDto> Digests { get; set; }
+        public List<EmailNotificationsResponseDto> EmailNotifications { get; set; }
+        public bool DataArchived {  get; set; }
     }
 
     public class DigestDto
     {
-        public string oid { get; set; }
-        public string otherOid { get; set; }
+        public string Oid { get; set; }
+        public string OtherOid { get; set; }
     }
 
     public class EmailNotificationsResponseDto
     {
-        public bool attached { get; set; }
-        public string message { get; set; }
+        public bool Attached { get; set; }
+        public string Message { get; set; }
     }
 }

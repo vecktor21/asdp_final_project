@@ -52,7 +52,7 @@ namespace ASDP.FinalProject
             
 
             services.AddRefitClient<SigexApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://sigex.kz"));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration.GetValue<string>("SigexApi")));
 
             
 

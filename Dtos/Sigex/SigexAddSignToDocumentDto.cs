@@ -7,7 +7,7 @@
         public List<SigexEmailNotifications> signatureEmailNotifications { get; set; }
     }
 
-    public class SigexSignDocumentResponse
+    public class SigexSignDocumentResponse: SigexResponse
     {
         public string documentId { get; set; }
         public int signId { get; set; }

@@ -38,9 +38,6 @@
 
   <ItemGroup>
     <Folder Include="DAL\Profiles\" />
-    <Folder Include="UseCases\Authorization\Commands\" />
-    <Folder Include="UseCases\Authorization\Queries\" />
-    <Folder Include="UseCases\Documents\Commands\" />
     <Folder Include="UseCases\Signing\Dtos\" />
     <Folder Include="UseCases\Signing\Queries\" />
   </ItemGroup>
