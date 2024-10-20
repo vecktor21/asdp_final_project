@@ -4,9 +4,11 @@ using ASDP.FinalProject.Helpers;
 using ASDP.FinalProject.UseCases.Authorization.Commands;
 using ASDP.FinalProject.UseCases.Authorization.Dtos;
 using ASDP.FinalProject.UseCases.Authorization.Queries;
+using ASDP.FinalProject.UseCases.Employees.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.IO;
@@ -29,20 +31,15 @@ namespace ASDP.FinalProject.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("nonce-block")]
-        [ProducesResponseType<SigexAuthNonceResponse>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetNonceBlock()
+        /// <summary>
+        /// полчить информацию о сотруднике. если null - значит не зарегистрирован
+        /// </summary>
+        /// <param name="iin"></param>
+        /// <returns></returns>
+        [HttpGet("getEmployeeByIin")]
+        public async Task<IActionResult> GetEmployeeByIin(string iin)
         {
-            var s = HttpContext.Request.Cookies;
-            return Ok(await _mediator.Send(new GetNonceBlockQuery()));
-        }
-
-        [HttpPost("authorize-nca")]
-        [ProducesResponseType<AuthDataResponse>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Authorize(AuthUsingNcaRequest data)
-        {
-            var s = HttpContext.Request.Cookies;
-            return Ok(await _mediator.Send(data));
+            return Ok( await _mediator.Send(new GetEmployeeByIinQuery { Iin = iin }));
         }
 
     }
