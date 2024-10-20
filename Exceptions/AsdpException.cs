@@ -1,5 +1,4 @@
-﻿using ASDP.FinalProject.Dtos.Sigex;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 
 namespace ASDP.FinalProject.Exceptions
 {
@@ -14,17 +13,6 @@ namespace ASDP.FinalProject.Exceptions
         public AsdpException(Result result, Exception exception) : base(result.Error, exception)
         {
             Result = result;
-        }
-    }
-
-    public class SigexException : AsdpException
-    {
-
-        public SigexException(SigexResponse response) : base(Result.Failure("Sigex: " + response.Message))
-        {
-        }
-        public SigexException(SigexResponse response, Exception exception) : base(Result.Failure("Sigex: " + response.Message), exception)
-        {
         }
     }
 }

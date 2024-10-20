@@ -1,5 +1,4 @@
-﻿using ASDP.FinalProject.Dtos.Sigex;
-using Refit;
+﻿using Refit;
 
 namespace ASDP.FinalProject.Services
 {

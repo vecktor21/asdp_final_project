@@ -41,12 +41,6 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 return Result.Failure($"Не поддерживаемый тип документа");
             }
 
-            var template = _context.Templates.Where(x => x.Id == request.TemplateId).FirstOrDefault();
-            if (template == null)
-            {
-                return Result.Failure($"Неподдерживаемый шаблон");
-            }
-
             return Result.Success();
 
         }

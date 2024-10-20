@@ -1,20 +1,6 @@
-﻿using ASDP.FinalProject.DAL.Models;
-using ASDP.FinalProject.Dtos.Sigex;
-using ASDP.FinalProject.Helpers;
-using ASDP.FinalProject.UseCases.Authorization.Commands;
-using ASDP.FinalProject.UseCases.Authorization.Dtos;
-using ASDP.FinalProject.UseCases.Authorization.Queries;
-using ASDP.FinalProject.UseCases.Employees.Queries;
+﻿using ASDP.FinalProject.UseCases.Employees.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Text.Json;
 
 namespace ASDP.FinalProject.Controllers
 {
