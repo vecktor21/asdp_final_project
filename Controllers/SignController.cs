@@ -1,4 +1,6 @@
 ﻿using ASDP.FinalProject.UseCases.Signing.Commands;
+using ASDP.FinalProject.UseCases.Signing.Dtos;
+using ASDP.FinalProject.UseCases.Signing.Queries;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +33,30 @@ namespace ASDP.FinalProject.Controllers
         {
             await _mediator.Send(data);
             return Ok();
+        }
+
+        /// <summary>
+        /// получить созданные очереди подписания
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpGet("createdSignPipelines")]
+        [ProducesResponseType<List<DocumentToSignDto>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCreatedSignPipelines([FromQuery]int userId)
+        {
+            return Ok( await _mediator.Send(new GetCreatedSignPipelinesQuery { UserId = userId}));
+        }
+
+        /// <summary>
+        /// получить документы которые надо подписать
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpGet("documentsToSign")]
+        [ProducesResponseType<List<DocumentToSignDto>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDocumentsToSign([FromQuery] int userId)
+        {
+            return Ok(await _mediator.Send(new GetSignPipelinesToSignQuery { UserId = userId }));
         }
 
     }
