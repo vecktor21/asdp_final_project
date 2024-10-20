@@ -41,7 +41,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                     content = ms.ToArray();
                 }
 
-                var signPipeline = new SignPipeline(creator, request.SigexSignId, content, request.GeneratedDocument.Name, request.SigexDocumentId);
+                var signPipeline = new SignPipeline(creator, request.SigexSignId, content, request.GeneratedDocument.FileName, request.SigexDocumentId);
 
 
                 var teamlid = await _context.Employees

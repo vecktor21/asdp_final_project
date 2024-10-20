@@ -4,6 +4,7 @@ using ASDP.FinalProject.UseCases.Documents.Queries;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace ASDP.FinalProject.Controllers
 {
@@ -59,6 +60,26 @@ namespace ASDP.FinalProject.Controllers
 
             });
             return Ok();
+        }
+
+        /// <summary>
+        /// скачать документ. Можно использовать с <a href=".../api/Documents/getDocument/{documentId}" target="_blank"> чтобы сразу скачать документа
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getDocument/{documentId}")]
+        [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]
+        public async Task<FileContentResult> GetDocument(Guid documentId)
+        {
+            var document = await _mediator.Send(new GetDocumentQuery { DocumentId=documentId});
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = document.Name,
+                Inline = false,
+            };
+            Response.Headers.Append("Content-Disposition", cd.ToString());
+
+            return File(document.Content, "application/pdf");
         }
     }
 }
