@@ -63,7 +63,7 @@ namespace ASDP.FinalProject.Controllers
         }
 
         /// <summary>
-        /// скачать документ. Можно использовать с <a href=".../api/Documents/getDocument/{documentId}" target="_blank"> чтобы сразу скачать документа
+        /// скачать сформированный документ. Можно использовать с <a href=".../api/Documents/getDocument/{documentId}" target="_blank"> </a>чтобы сразу скачать документа
         /// </summary>
         /// <returns></returns>
         [HttpGet("getDocument/{documentId}")]
@@ -80,6 +80,33 @@ namespace ASDP.FinalProject.Controllers
             Response.Headers.Append("Content-Disposition", cd.ToString());
 
             return File(document.Content, "application/pdf");
+        }
+
+        /// <summary>
+        /// скачать шаблон. Можно использовать с <a href=".../api/Documents/getTemplate/{templateId}" target="_blank"> </a> чтобы сразу скачать документ
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getTemplate/{templateId}")]
+        [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]
+        public async Task<FileContentResult> GetTemplate(Guid templateId)
+        {
+            var document = await _mediator.Send(new GetTemplateQuery { TemplateId= templateId });
+
+            var extension = document.ContentType switch
+            {
+                "application/msword" => "doc",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => "docx",
+                _=>"docx"
+            };
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = $"{document.Name}.{extension}",
+                Inline = false,
+            };
+            Response.Headers.Append("Content-Disposition", cd.ToString());
+
+            return File(document.Content, document.ContentType);
         }
     }
 }
