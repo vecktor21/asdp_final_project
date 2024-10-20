@@ -28,7 +28,10 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
 
             try
             {
-                var creator = await _context.Employees.SingleAsync(x => x.Id == request.UserId);
+                var creator = await _context.Employees
+                    .Include(x=>x.PipelinesToSign)
+                    .Include(x=>x.CreatedSignPipelines)
+                    .SingleAsync(x => x.Id == request.UserId);
 
                 byte[] content;
 
@@ -38,11 +41,18 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                     content = ms.ToArray();
                 }
 
-                var signPipeline = new SignPipeline(creator, request.SigexSidnId, content, request.GeneratedDocument.Name, request.SigexDocumentId);
+                var signPipeline = new SignPipeline(creator, request.SigexSignId, content, request.GeneratedDocument.Name, request.SigexDocumentId);
 
 
-                var teamlid = await _context.Employees.FirstAsync(x => x.Position.Code == Constants.PositionCode.Teamlid && x.Iin == request.TeamleadIin);
-                var director = await _context.Employees.FirstAsync(x => x.Position.Code == Constants.PositionCode.Director && x.Iin == request.DirectorIin);
+                var teamlid = await _context.Employees
+                    .Include(x => x.PipelinesToSign)
+                    .Include(x => x.CreatedSignPipelines)
+                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Teamlid && x.Iin == request.TeamleadIin);
+
+                var director = await _context.Employees
+                    .Include(x => x.PipelinesToSign)
+                    .Include(x => x.CreatedSignPipelines)
+                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Director && x.Iin == request.DirectorIin);
 
                 signPipeline.AddSigner(teamlid, 1);
                 signPipeline.AddSigner(director, 2);

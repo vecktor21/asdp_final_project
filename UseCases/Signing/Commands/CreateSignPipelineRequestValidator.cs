@@ -15,6 +15,8 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
             _context = unitOfWork.GetContext();
             RuleFor(x => x.TeamleadIin).Length(12);
             RuleFor(x => x.DirectorIin).Length(12);
+            RuleFor(x => x.SigexDocumentId).NotNull().NotEmpty().MinimumLength(1);
+            RuleFor(x => x.SigexSignId).NotNull().NotEqual(0);
         }
         public override async Task<Result> RequestValidateAsync(CreateSignPipelineRequest request, CancellationToken cancellationToken)
         {

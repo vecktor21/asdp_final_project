@@ -10,6 +10,6 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
         public string TeamleadIin { get; set; }
         public string DirectorIin { get; set; }
         public string SigexDocumentId { get; set; }
-        public long SigexSidnId { get; set; }
+        public long SigexSignId { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         public Guid SignPipelineId { get; set; }
         public SignPipeline SignPipeline { get; set; }
         public byte[] Content { get; set; }
-        public DateTimeOffset IndexDate { get; set; } = DateTimeOffset.Now;
+        public DateTime IndexDate { get; set; } = DateTime.UtcNow;
         public string Name { get; set; }
         public string SigexDocumentId { get; set; }
 

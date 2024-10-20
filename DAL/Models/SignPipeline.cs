@@ -21,6 +21,8 @@ namespace ASDP.FinalProject.DAL.Models
             this.Status = SignPipelineStatus.Created;
             this.SigexSignId = sigexSignId;
 
+            creator.CreatedSignPipelines.Add(this);
+
             var signDocument = new SignDocument(content, signDocumentName, this, sigexDocumentId);
             
             this.SignDocument = signDocument;
@@ -34,6 +36,7 @@ namespace ASDP.FinalProject.DAL.Models
         {
             SignerToPipeline signerToPipeline = new SignerToPipeline(signer, order, this);
             this.Signers.Add(signerToPipeline);
+            signer.PipelinesToSign.Add(signerToPipeline);
         }
     }
 }

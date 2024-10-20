@@ -20,6 +20,10 @@ namespace ASDP.FinalProject.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// получить список доступных шаблонов
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("loadTemplates")]
         [ProducesResponseType<List<TemplateResponse>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTemplates()
@@ -30,7 +34,7 @@ namespace ASDP.FinalProject.Controllers
 
 
         /// <summary>
-        /// 
+        /// добавить шаблон
         /// </summary>
         /// <param name="name">template name</param>
         /// <param name="file">load template</param>
@@ -40,7 +44,6 @@ namespace ASDP.FinalProject.Controllers
         public async Task<IActionResult> AddTemplate([FromForm] string name, IFormFile file)
         {
             byte[] data;
-            //var file = HttpContext.Request.Form.Files[0];
 
             using (var ms = new MemoryStream())
             {

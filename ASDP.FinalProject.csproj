@@ -37,9 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\" />
     <Folder Include="DAL\Profiles\" />
     <Folder Include="Dtos\" />
     <Folder Include="UseCases\Authorization\Commands\" />
+    <Folder Include="UseCases\Authorization\Dtos\" />
     <Folder Include="UseCases\Authorization\Profiles\" />
     <Folder Include="UseCases\Authorization\Queries\" />
     <Folder Include="UseCases\Signing\Dtos\" />

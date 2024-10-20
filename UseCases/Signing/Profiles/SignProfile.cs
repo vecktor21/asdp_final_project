@@ -7,7 +7,6 @@ namespace ASDP.FinalProject.UseCases.Signing.Profiles
     {
         public SignProfile()
         {
-            CreateMap<CreateSignPipelineContract, CreateSignPipelineRequest>();
         }
     }
 }

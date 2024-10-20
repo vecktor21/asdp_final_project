@@ -20,12 +20,16 @@ namespace ASDP.FinalProject.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// создать очередь подписания
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("registerSignPipeline")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateSignPipeline([FromForm] CreateSignPipelineContract data)
+        public async Task<IActionResult> CreateSignPipeline([FromForm] CreateSignPipelineRequest data)
         {
-            var req = _mapper.Map<CreateSignPipelineRequest>(data);
-            await _mediator.Send(req);
+            await _mediator.Send(data);
             return Ok();
         }
 

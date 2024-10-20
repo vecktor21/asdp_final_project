@@ -1,4 +1,5 @@
-﻿using ASDP.FinalProject.UseCases.Employees.Queries;
+﻿using ASDP.FinalProject.UseCases.Employees.Dtos;
+using ASDP.FinalProject.UseCases.Employees.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,8 @@ namespace ASDP.FinalProject.Controllers
         /// <param name="iin"></param>
         /// <returns></returns>
         [HttpGet("getEmployeeByIin")]
+        [ProducesResponseType<EmployeeDto>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> GetEmployeeByIin(string iin)
         {
             return Ok( await _mediator.Send(new GetEmployeeByIinQuery { Iin = iin }));
