@@ -15,7 +15,5 @@ namespace ASDP.FinalProject.UseCases.Employees.Commands
         public string IdentityNumber { get; set; } = null!;
         public string IdentityIssuer { get; set; } = null!;
         public DateTime IdentityIssueDate { get; set; }
-        public string Password { get; set; } = null!;
-        public string RepeatPassword { get; set; } = null!;
     }
 }
