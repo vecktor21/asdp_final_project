@@ -30,5 +30,8 @@ jobs:
           rm -rf asdp_final_project
           git clone https://github.com/vecktor21/asdp_final_project.git
           cd asdp_final_project
+          mv Dokcerfile /home/useradsp/adsp
+          mv docker-compose.yml /home/useradsp/adsp
+          cd .. 
           docker compose up --build -d
         EOF
