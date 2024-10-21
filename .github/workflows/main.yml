@@ -22,10 +22,11 @@ jobs:
         SERVER_HOST: ${{ secrets.SERVER_HOST }}
         SERVER_USER: ${{ secrets.SERVER_USER }}
       run: |
-        mkdir -p ~/.ssh                  
-        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa  
-        chmod 600 ~/.ssh/id_rsa                    
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+       mkdir -p ~/.ssh
+       echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+       chmod 600 ~/.ssh/id_rsa
+       ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+       ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_HOST << 'EOF'
           cd adsp
           docker compose down
           rm -rf asdp_final_project
