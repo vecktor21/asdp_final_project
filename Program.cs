@@ -3,6 +3,9 @@ using ASDP.FinalProject;
 using ASDP.FinalProject.Filter;
 using Serilog;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
+using ASDP.FinalProject.DAL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSerilog(x=>
     x.WriteTo.Console()
     );
+
+builder.Services.AddCors(opt => opt.AddPolicy("allow_all", pol => pol.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin())
+);
 
 builder.Services.AddControllers(x =>
 {
@@ -29,13 +37,17 @@ builder.Services.AddSwaggerGen(x =>
 builder.Services.Inject(builder.Configuration);
 
 var app = builder.Build();
+app.UseCors("allow_all");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AdspContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
