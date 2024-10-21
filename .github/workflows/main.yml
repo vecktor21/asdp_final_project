@@ -27,6 +27,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_HOST << 'EOF'
+          set -e
           cd adsp
           docker compose down
           rm -rf asdp_final_project
