@@ -30,5 +30,6 @@ jobs:
           rm -rf asdp_final_project
           git clone https://github.com/vecktor21/asdp_final_project.git
           cd asdp_final_project
+          sudo -s
           docker compose up --build -d
         EOF
