@@ -1,4 +1,6 @@
 ﻿using ASDP.FinalProject.Constants;
+using ASDP.FinalProject.Exceptions;
+using CSharpFunctionalExtensions;
 
 namespace ASDP.FinalProject.DAL.Models
 {
@@ -37,6 +39,29 @@ namespace ASDP.FinalProject.DAL.Models
             SignerToPipeline signerToPipeline = new SignerToPipeline(signer, order, this);
             this.Signers.Add(signerToPipeline);
             signer.PipelinesToSign.Add(signerToPipeline);
+        }
+
+
+        public void SignEmployee(bool isSign, int userId)
+        {
+            var employeeToSign = Signers
+                .OrderBy(x=>x.Order)
+                .First(x=>!x.IsSigned && x.SignerEmployeeId == userId);
+
+            if (isSign)
+            {
+                employeeToSign.Sign();
+                this.Status = employeeToSign.SignerEmployee.Position.Code switch
+                {
+                    PositionCode.Director => SignPipelineStatus.SignedByDirector,
+                    PositionCode.Teamlid => SignPipelineStatus.SignedByTeamlid,
+                    _ => throw new AsdpException(Result.Failure("Не корректная должность подписанта"))
+                };
+            }
+            else
+            {
+                this.Status = SignPipelineStatus.Rejected;
+            }
         }
     }
 }
