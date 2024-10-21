@@ -26,20 +26,25 @@ jobs:
         mkdir -p ~/.ssh
         echo "${SSH_PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        echo "Adding server host to known hosts: $SERVER_HOST"
-        if ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts; then
-          echo "Successfully added $SERVER_HOST to known_hosts"
-        else
-          echo "Failed to add $SERVER_HOST to known_hosts"
+        echo "Adding server host to known hosts: '$SERVER_HOST'"  
+        if [ -z "$SERVER_HOST" ]; then
+         echo "SERVER_HOST is empty. Please check your GitHub secrets."
         exit 1
         fi
 
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_HOST << 'EOF'
+        if ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts; then
+         echo "Successfully added $SERVER_HOST to known_hosts"
+        else
+         echo "Failed to add $SERVER_HOST to known_hosts"
+        exit 1
+        fi
+
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "$SERVER_USER@$SERVER_HOST" << 'EOF'
+          sudo -s
           cd adsp
           docker compose down
           rm -rf asdp_final_project
           git clone https://github.com/vecktor21/asdp_final_project.git
           cd asdp_final_project
-          sudo -s
           docker compose up --build -d
         EOF
