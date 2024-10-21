@@ -23,7 +23,7 @@ namespace ASDP.FinalProject.Behaviors
         {
             foreach (var validator in _validators)
             {
-                var validateFluentRulesResult = await validator.RequestValidateAsync(request, cancellationToken);
+                var validateFluentRulesResult = await validator.RequestValidateFluentRulesAsync(request, cancellationToken);
                 if (validateFluentRulesResult.IsFailure)
                 {
                     throw new AsdpException(validateFluentRulesResult);

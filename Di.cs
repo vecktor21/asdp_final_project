@@ -50,12 +50,6 @@ namespace ASDP.FinalProject
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             
-
-            services.AddRefitClient<SigexApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration.GetValue<string>("SigexApi")));
-
-            
-
             return services;
         }
     }

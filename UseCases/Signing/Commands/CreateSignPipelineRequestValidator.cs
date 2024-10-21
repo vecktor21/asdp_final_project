@@ -15,6 +15,8 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
             _context = unitOfWork.GetContext();
             RuleFor(x => x.TeamleadIin).Length(12);
             RuleFor(x => x.DirectorIin).Length(12);
+            RuleFor(x => x.SigexDocumentId).NotNull().NotEmpty().MinimumLength(1);
+            RuleFor(x => x.SigexSignId).NotNull().NotEqual(0);
         }
         public override async Task<Result> RequestValidateAsync(CreateSignPipelineRequest request, CancellationToken cancellationToken)
         {
@@ -39,12 +41,6 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
             if(fileType != "application/pdf")
             {
                 return Result.Failure($"Не поддерживаемый тип документа");
-            }
-
-            var template = _context.Templates.Where(x => x.Id == request.TemplateId).FirstOrDefault();
-            if (template == null)
-            {
-                return Result.Failure($"Неподдерживаемый шаблон");
             }
 
             return Result.Success();

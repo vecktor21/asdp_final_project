@@ -3,6 +3,7 @@ using System;
 using ASDP.FinalProject.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ASDP.FinalProject.Migrations
 {
     [DbContext(typeof(AdspContext))]
-    partial class AdspContextModelSnapshot : ModelSnapshot
+    [Migration("20241020171258_fix_SignDocument_DateTime")]
+    partial class fix_SignDocument_DateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,10 +270,6 @@ namespace ASDP.FinalProject.Migrations
                     b.Property<byte[]>("Content")
                         .IsRequired()
                         .HasColumnType("bytea");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("IndexDate")
                         .HasColumnType("timestamp with time zone");

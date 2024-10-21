@@ -17,8 +17,6 @@ namespace ASDP.FinalProject.UseCases.Employees.Commands
             RuleFor(x => x.Name).NotNull();
             RuleFor(x => x.SurName).NotNull();
             RuleFor(x => x.Mail).NotNull().EmailAddress();
-            RuleFor(x => x.Password).NotNull();
-            RuleFor(x => x.RepeatPassword).NotNull();
             RuleFor(x => x.IdentityNumber).NotNull();
             RuleFor(x => x.IdentityIssueDate).NotNull();
             RuleFor(x => x.IdentityIssuer).NotNull();

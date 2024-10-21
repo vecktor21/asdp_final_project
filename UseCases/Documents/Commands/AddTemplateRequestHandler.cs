@@ -25,7 +25,7 @@ namespace ASDP.FinalProject.UseCases.Documents.Commands
                 _context.Remove(existingTemplate);
             }
 
-            var template = new Template(request.Content, request.Name);
+            var template = new Template(request.Content, request.Name, request.ContentType);
             _context.Templates.Add(template);
 
             await _context.SaveChangesAsync();

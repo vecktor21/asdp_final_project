@@ -23,15 +23,16 @@ namespace ASDP.FinalProject.UseCases.Employees.Commands
         }
         public async Task<EmployeeDto> Handle(RegisterEmployeeRequest request, CancellationToken cancellationToken)
         {
-            var hashPassword = PasswordHasher.HashPassword(request.Password);
-            Employee emp = _mapper.Map<Employee>(request);
-            emp.Password = hashPassword;
-
             var position = await _context.Positions.SingleAsync(x => x.Code == request.PositionCode);
-            emp.Position = position;
-            _context.Employees.Add(emp);
+
+            Employee employee = new Employee(request.Name, request.SurName, request.Iin, request.Mail, request.IdentityNumber,
+                request.IdentityIssuer, request.IdentityIssueDate, position);
+            
+            _context.Employees.Add(employee);
             await _unitOfWork.SaveChangesAsync();
-            var dto = _mapper.Map<EmployeeDto>(emp);
+            
+            var dto = _mapper.Map<EmployeeDto>(employee);
+            
             return dto;
         }
     }
