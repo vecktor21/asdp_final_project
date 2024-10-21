@@ -16,6 +16,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Profiles
                 .ForMember(x => x.StatusCode, opt => opt.MapFrom(src => src.Status))
                 .ForMember(x => x.CreatedDate, opt => opt.MapFrom(src => src.SignDocument.IndexDate))
                 .ForMember(x => x.DocumentId, opt => opt.MapFrom(src => src.SignDocumentId))
+                .ForMember(x => x.SignPipelineId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.SignDocument.Name));
         }
     }

@@ -59,5 +59,17 @@ namespace ASDP.FinalProject.Controllers
             return Ok(await _mediator.Send(new GetSignPipelinesToSignQuery { UserId = userId }));
         }
 
+        /// <summary>
+        /// подписать документ
+        /// </summary>
+        /// <param name="signData"></param>
+        /// /// <param name="signData.isSign">флаг - подписать или отклонить документ</param>
+        /// <returns></returns>
+        [HttpPost("signDocument")]
+        public async Task<IActionResult> GetDocumentsToSign([FromBody]SignDocumentCommand signData)
+        {
+            return Ok(await _mediator.Send(signData));
+        }
+
     }
 }
