@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore ASDP.FinalProject.sln
+
+    - name: Build the project
+      run: dotnet build ASDP.FinalProject.sln --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test ASDP.FinalProject.sln --configuration Release --no-restore --verbosity normal
+
+    - name: Publish the project
+      run: dotnet publish ASDP.FinalProject.sln --configuration Release --no-build --output ./publish
+
+    - name: Deploy to Server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "mkdir -p ~/project"
+        scp -o StrictHostKeyChecking=no -r ./publish/* $SERVER_USER@$SERVER_HOST:~/project/
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd ~/project && docker-compose down && docker-compose up -d --build"
