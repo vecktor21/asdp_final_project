@@ -21,7 +21,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 .ThenInclude(x => x.SignerEmployee.Position)
                 .FirstAsync(x => x.Id == request.SignPipelineId);
 
-            signPipeline.SignEmployee(request.IsSign, request.UserId);
+            signPipeline.SignEmployee(request.IsSign, request.CreatorUserId);
 
             _context.Update(signPipeline);
 

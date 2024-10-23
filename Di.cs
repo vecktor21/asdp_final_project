@@ -11,6 +11,7 @@ using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using ASDP.FinalProject.UseCases.Employees.Commands;
+using ASDP.FinalProject.Services.TagReplacers;
 
 namespace ASDP.FinalProject
 {
@@ -18,7 +19,6 @@ namespace ASDP.FinalProject
     {
         public static IServiceCollection Inject(this IServiceCollection services, IConfiguration configuration)
         {
-            var s = configuration.GetConnectionString("Default");
             services.AddDbContext<AdspContext>(x =>
             {
                 x.UseNpgsql(configuration.GetConnectionString("Default"));
@@ -49,7 +49,15 @@ namespace ASDP.FinalProject
             services.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            
+
+            services.AddScoped<ITagsService, TagsService>();
+
+            services.Scan(x => x.FromAssemblies(Assembly.GetExecutingAssembly())
+                            .AddClasses(x => x.AssignableTo(typeof(ITagReplacer)))
+                            .AsImplementedInterfaces()
+                            .AsSelf()
+                            .WithScopedLifetime());
+
             return services;
         }
     }

@@ -47,12 +47,12 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 var teamlid = await _context.Employees
                     .Include(x => x.PipelinesToSign)
                     .Include(x => x.CreatedSignPipelines)
-                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Teamlid && x.Iin == request.TeamleadIin);
+                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Teamlid && x.Id == request.TeamleadId);
 
                 var director = await _context.Employees
                     .Include(x => x.PipelinesToSign)
                     .Include(x => x.CreatedSignPipelines)
-                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Director && x.Iin == request.DirectorIin);
+                    .FirstAsync(x => x.Position.Code == Constants.PositionCode.Director && x.Id == request.DirectorId);
 
                 signPipeline.AddSigner(teamlid, 1);
                 signPipeline.AddSigner(director, 2);

@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.Extensions.Hosting;
 using ASDP.FinalProject.DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,10 @@ builder.Services.AddSwaggerGen(x =>
 {
     x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ASDP.FinalProject.xml"));
 });
+
+var syncfusionLicense = builder.Configuration.GetValue<string>("SyncfusionTrialKey");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncfusionLicense);
+
 
 builder.Services.Inject(builder.Configuration);
 
