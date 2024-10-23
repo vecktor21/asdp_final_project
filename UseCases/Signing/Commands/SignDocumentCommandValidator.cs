@@ -22,7 +22,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
         {
             _context = unitOfWork.GetContext();
             RuleFor(x => x.SignPipelineId).NotEmpty();
-            RuleFor(x=>x.UserId).NotEmpty();
+            RuleFor(x=>x.CreatorUserId).NotEmpty();
         }
         public override async Task<Result> RequestValidateAsync(SignDocumentCommand request, CancellationToken cancellationToken)
         {
@@ -42,7 +42,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 return Result.Failure("Очередь подписания завершена");
             }
 
-            var employee = await _context.Employees.FirstOrDefaultAsync(x=>x.Id==request.UserId);
+            var employee = await _context.Employees.FirstOrDefaultAsync(x=>x.Id==request.CreatorUserId);
             if (employee==null)
             {
                 return Result.Failure("Сотрудник не найден");
@@ -58,7 +58,7 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
                 return Result.Failure("Очередь подписания завершена");
             }
 
-            if(employeeToSign.Id !=request.UserId)
+            if(employeeToSign.Id !=request.CreatorUserId)
             {
                 return Result.Failure("Сейчас не ваша очередь подписать");
             }

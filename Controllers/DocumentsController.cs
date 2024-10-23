@@ -130,6 +130,36 @@ namespace ASDP.FinalProject.Controllers
             Response.Headers.Append("Content-Disposition", cd.ToString().Replace("\r\n", ""));
             return File(document.ToArray(), "application/pdf");
         }
+
+        [HttpPost("generateDocument")]
+        [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]
+        public async Task<FileContentResult> GenerateDocument([FromForm] Guid templateId, [FromForm] int creatorEmployeeId, [FromForm] int directorId, [FromForm] int teamlidId)
+        {
+            var document = await _mediator.Send(new GenerateSignDocumentCommand()
+            {
+                TemplateId = templateId,
+                CreatorUserId = creatorEmployeeId,
+                TeamleadId = teamlidId,
+                DirectorId = directorId
+            });
+
+            if (Path.GetExtension(document.Name).Contains("doc"))
+            {
+                document.Name = Path.ChangeExtension(document.Name, ".pdf");
+            }
+            else if (string.IsNullOrEmpty(Path.GetExtension(document.Name)))
+            {
+                document.Name = Path.ChangeExtension(document.Name, ".pdf");
+            }
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = $"{document.Name}",
+                Inline = false,
+            };
+            Response.Headers.Append("Content-Disposition", cd.ToString().Replace("\r\n", ""));
+            return File(document.Content, "application/pdf");
+        }
     }
 
 }
