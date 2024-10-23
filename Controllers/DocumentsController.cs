@@ -1,10 +1,12 @@
-﻿using ASDP.FinalProject.UseCases.Documents.Commands;
+﻿using ASDP.FinalProject.Services;
+using ASDP.FinalProject.UseCases.Documents.Commands;
 using ASDP.FinalProject.UseCases.Documents.Dtos;
 using ASDP.FinalProject.UseCases.Documents.Queries;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace ASDP.FinalProject.Controllers
 {
@@ -14,11 +16,13 @@ namespace ASDP.FinalProject.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ITagsService _tagsService;
 
-        public DocumentsController(IMediator mediator, IMapper mapper)
+        public DocumentsController(IMediator mediator, IMapper mapper, ITagsService tagsService)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _tagsService = tagsService;
         }
 
         /// <summary>
@@ -108,5 +112,24 @@ namespace ASDP.FinalProject.Controllers
 
             return File(document.Content, document.ContentType);
         }
+
+        [HttpPost("TestReplaceTags")]
+        [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]
+        public async Task<FileContentResult> TestReplaceTags([FromForm]IFormFile file, [FromForm] int creatorEmployeeId, [FromForm] int directorId, [FromForm]int teamlidId)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            var document = (MemoryStream)await _tagsService.FillTags(ms, new SignContext(creatorEmployeeId, teamlidId, directorId));
+            var extension = "pdf";
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = $"{file.FileName.Substring(0, Math.Min(file.FileName.Length, 50))}.{extension}",
+                Inline = false,
+            };
+            Response.Headers.Append("Content-Disposition", cd.ToString().Replace("\r\n", ""));
+            return File(document.ToArray(), "application/pdf");
+        }
     }
+
 }
