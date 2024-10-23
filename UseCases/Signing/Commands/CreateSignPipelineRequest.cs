@@ -7,8 +7,8 @@ namespace ASDP.FinalProject.UseCases.Signing.Commands
     {
         public int UserId { get; set; }
         public IFormFile GeneratedDocument { get; set; }
-        public string TeamleadIin { get; set; }
-        public string DirectorIin { get; set; }
+        public int TeamleadId { get; set; }
+        public int DirectorId { get; set; }
         public string SigexDocumentId { get; set; }
         public long SigexSignId { get; set; }
     }
