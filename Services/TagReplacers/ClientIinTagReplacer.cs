@@ -7,7 +7,7 @@ namespace ASDP.FinalProject.Services.TagReplacers
     public class ClientIinTagReplacer : BaseCreatorEmployeeTagReplacer
     {
         public ClientIinTagReplacer(IUnitOfWork unitOfWork) : base(unitOfWork) { }
-        public override string Tag { get; } = Tags.EmployeeIin;
+        public override string Tag { get; } = Tags.EmployeeIIN;
         public ClientIinTagReplacer()
         {
             

@@ -12,7 +12,6 @@ using Syncfusion.DocIORenderer;
 
 namespace ASDP.FinalProject.Services
 {
-    public record SignContext(int creatorEmployeeId, int teamlidId, int directorId);
 
     public class TagsService : ITagsService
     {
