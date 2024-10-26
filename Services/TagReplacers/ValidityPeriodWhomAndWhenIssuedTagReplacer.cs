@@ -9,7 +9,7 @@ namespace ASDP.FinalProject.Services.TagReplacers
 
         protected override Task<string> FindValue(Employee employee)
         {
-            var res = $"{employee.IdentityIssueDate} {employee.IdentityIssuer}";
+            var res = $"{employee.IdentityIssueDate.ToString("dd.MM.yyyy")} {employee.IdentityIssuer}";
             return Task.FromResult(res);
         }
     }
