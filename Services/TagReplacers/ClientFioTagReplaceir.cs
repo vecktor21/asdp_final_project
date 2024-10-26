@@ -9,7 +9,7 @@ namespace ASDP.FinalProject.Services.TagReplacers
 
         protected override Task<string> FindValue(Employee employee)
         {
-            var fio = $"{employee.SurName} ${employee.Name}";
+            var fio = $"{employee.SurName} {employee.Name}";
             return Task.FromResult(fio);
         }
     }

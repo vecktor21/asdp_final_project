@@ -3,6 +3,7 @@ using ASDP.FinalProject.DAL.Repositories;
 using ASDP.FinalProject.Services;
 using ASDP.FinalProject.UseCases.Signing.Dtos;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASDP.FinalProject.UseCases.Documents.Commands
 {
@@ -26,9 +27,9 @@ namespace ASDP.FinalProject.UseCases.Documents.Commands
             using var ms = new MemoryStream();
             ms.Write(template.Content);
 
-            var employee = _context.Employees.FirstOrDefault(x => x.Id == request.CreatorUserId);
-            var teamlid = _context.Employees.FirstOrDefault(x => x.Id == request.TeamleadId);
-            var director = _context.Employees.FirstOrDefault(x => x.Id == request.DirectorId);
+            var employee = _context.Employees.Include(x=>x.Position.Permissions).FirstOrDefault(x => x.Id == request.CreatorUserId);
+            var teamlid = _context.Employees.Include(x => x.Position.Permissions).FirstOrDefault(x => x.Id == request.TeamleadId);
+            var director = _context.Employees.Include(x => x.Position.Permissions).FirstOrDefault(x => x.Id == request.DirectorId);
 
             var filledDocumentStream = (MemoryStream)await _tagsService.FillTags(ms, new SignContext(employee, teamlid, director));
 

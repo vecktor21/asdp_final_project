@@ -4,7 +4,7 @@ namespace ASDP.FinalProject.Services.TagReplacers
 {
     public class DateTagReplacer : ITagReplacer
     {
-        public string Tag { get; } = Tags.TeamLeadFIO;
+        public string Tag { get; } = Tags.Date;
 
         public Task<string> FindTagValue(SignContext signContext)
         {
