@@ -26,7 +26,11 @@ namespace ASDP.FinalProject.UseCases.Documents.Commands
             using var ms = new MemoryStream();
             ms.Write(template.Content);
 
-            var filledDocumentStream = (MemoryStream)await _tagsService.FillTags(ms, new SignContext(request.CreatorUserId, request.TeamleadId, request.DirectorId));
+            var employee = _context.Employees.FirstOrDefault(x => x.Id == request.CreatorUserId);
+            var teamlid = _context.Employees.FirstOrDefault(x => x.Id == request.TeamleadId);
+            var director = _context.Employees.FirstOrDefault(x => x.Id == request.DirectorId);
+
+            var filledDocumentStream = (MemoryStream)await _tagsService.FillTags(ms, new SignContext(employee, teamlid, director));
 
             var content = filledDocumentStream.ToArray();
 

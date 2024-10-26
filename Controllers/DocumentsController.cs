@@ -114,7 +114,7 @@ namespace ASDP.FinalProject.Controllers
             return File(document.Content, document.ContentType);
         }
 
-        [HttpPost("TestReplaceTags")]
+        /*[HttpPost("TestReplaceTags")]
         [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]
         public async Task<FileContentResult> TestReplaceTags([FromForm]IFormFile file, [FromForm] int creatorEmployeeId, [FromForm] int directorId, [FromForm]int teamlidId)
         {
@@ -130,7 +130,7 @@ namespace ASDP.FinalProject.Controllers
             };
             Response.Headers.Append("Content-Disposition", cd.ToString().Replace("\r\n", ""));
             return File(document.ToArray(), "application/pdf");
-        }
+        }*/
 
         [HttpPost("generateDocument")]
         [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK)]

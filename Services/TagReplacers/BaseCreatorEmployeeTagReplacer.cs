@@ -1,8 +1,6 @@
-﻿using ASDP.FinalProject.Constants;
-using ASDP.FinalProject.DAL;
+﻿using ASDP.FinalProject.DAL;
 using ASDP.FinalProject.DAL.Models;
 using ASDP.FinalProject.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ASDP.FinalProject.Services.TagReplacers
 {
@@ -21,9 +19,7 @@ namespace ASDP.FinalProject.Services.TagReplacers
 
         public async Task<string> FindTagValue(SignContext signContext)
         {
-            var employeeCreator = await _context.Employees.Include(x => x.Position.Permissions)
-                .SingleAsync(x => x.Id == signContext.creatorEmployeeId);
-            return await FindValue(employeeCreator);
+            return await FindValue(signContext.creatorEmployee);
         }
 
         protected abstract Task<string> FindValue(Employee employee);
