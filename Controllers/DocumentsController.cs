@@ -1,4 +1,5 @@
-﻿using ASDP.FinalProject.Services;
+﻿using ASDP.FinalProject.Constants;
+using ASDP.FinalProject.Services;
 using ASDP.FinalProject.UseCases.Documents.Commands;
 using ASDP.FinalProject.UseCases.Documents.Dtos;
 using ASDP.FinalProject.UseCases.Documents.Queries;
@@ -159,6 +160,18 @@ namespace ASDP.FinalProject.Controllers
             };
             Response.Headers.Append("Content-Disposition", cd.ToString().Replace("\r\n", ""));
             return File(document.Content, "application/pdf");
+        }
+
+        /// <summary>
+        /// получить список доступных тегов
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("tags")]
+        public IActionResult GetAllTags()
+        {
+            var res = Tags.AllTags();
+
+            return new JsonResult(res);
         }
     }
 
