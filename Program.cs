@@ -16,7 +16,7 @@ var seq_token = builder.Configuration.GetValue<string>("Seq:Token");
 // Add services to the container.
 builder.Services.AddSerilog(x=>
     x.WriteTo.Console()
-    .WriteTo.Seq(seq_addr, apiKey: seq_token));
+    .WriteTo.Seq(seq_addr, /*Serilog.Events.LogEventLevel.Information,*/ apiKey: seq_token));
 
 builder.Services.AddCors(opt => opt.AddPolicy("allow_all", pol => pol.AllowAnyHeader()
     .AllowAnyMethod()
