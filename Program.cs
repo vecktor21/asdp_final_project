@@ -10,10 +10,13 @@ using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var seq_addr = builder.Configuration.GetValue<string>("Seq:Api");
+var seq_token = builder.Configuration.GetValue<string>("Seq:Token");
+
 // Add services to the container.
 builder.Services.AddSerilog(x=>
     x.WriteTo.Console()
-    );
+    .WriteTo.Seq(seq_addr, apiKey: seq_token));
 
 builder.Services.AddCors(opt => opt.AddPolicy("allow_all", pol => pol.AllowAnyHeader()
     .AllowAnyMethod()
