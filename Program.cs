@@ -23,6 +23,8 @@ builder.Services.AddCors(opt => opt.AddPolicy("allow_all", pol => pol.AllowAnyHe
     .AllowAnyOrigin())
 );
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<AdspExceptionFilter>();
@@ -62,5 +64,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthChecks("/health");
 
 app.Run();
